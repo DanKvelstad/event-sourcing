@@ -1,9 +1,10 @@
 FROM microsoft/dotnet:sdk as build
-WORKDIR C:\\Alpha
+WORKDIR /app
 COPY . .
-RUN dotnet publish -c Release -o Publish
+RUN dotnet publish -c Release -o publish
 
 FROM microsoft/dotnet:runtime as runtime
-WORKDIR C:\\Alpha
-COPY --from=build C:\\Alpha\\Publish\\ .
+WORKDIR /app
+COPY --from=build /app/publish/ .
+#RUN dotnet add package EventStore.ClientAPI.NetCore
 ENTRYPOINT ["dotnet", "Alpha.dll"]
