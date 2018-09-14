@@ -5,6 +5,7 @@ RUN rm Program.cs
 RUN dotnet add package EventStore.ClientAPI.NetCore
 RUN dotnet add package Newtonsoft.Json
 COPY src src
+ADD https://raw.githubusercontent.com/DanKvelstad/event-sourcing/master/EventDefinitions/Events.cs src
 COPY Dimmer.csproj .
 RUN dotnet publish -c Release -o publish
 

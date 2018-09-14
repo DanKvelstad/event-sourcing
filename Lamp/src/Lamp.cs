@@ -40,7 +40,7 @@ namespace Hello
                 await connection.SubscribeToStreamAsync(
                     streamName, 
                     false, 
-                    async (EventStoreSubscription EventStoreSubscription, ResolvedEvent ResolvedEvent) => 
+                    (EventStoreSubscription EventStoreSubscription, ResolvedEvent ResolvedEvent) => 
                     {
                         if(nameof(DimmerChangedEvent) == ResolvedEvent.Event.EventType)
                         {
@@ -54,7 +54,7 @@ namespace Hello
                             );
                         }
                     },
-                    async (EventStoreSubscription EventStoreSubscription, SubscriptionDropReason SubscriptionDropReason, Exception Exception) =>
+                    (EventStoreSubscription EventStoreSubscription, SubscriptionDropReason SubscriptionDropReason, Exception Exception) =>
                     {
                         Console.WriteLine(
                             "The subscription was dropped because of: {0}",
