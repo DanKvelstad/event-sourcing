@@ -1,3 +1,11 @@
+using System;
+
+namespace SmartHome
+{
+    
+namespace Events
+{
+
 class GeneralMetaData
 {
     
@@ -5,11 +13,24 @@ class GeneralMetaData
 
 }
 
-class DimmerChangedEvent
+class BrightnessChanged
 {
+
+    public Guid Identifier;
     
-    public string Color;
+    public int Change;
+
+}
+
+class ColorChanged
+{
+
+    public Guid Identifier;
     
-    public int Intensity;
+    public int Change;
+
+}
+
+}
 
 }
