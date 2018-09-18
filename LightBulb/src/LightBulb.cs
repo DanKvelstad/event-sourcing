@@ -71,7 +71,7 @@ namespace SmartHome
             };
 
             using(var connection = EventStoreConnection.Create(
-                ConnectionSettings.Create().UseConsoleLogger().FailOnNoServerResponse().LimitReconnectionsTo(0),
+                ConnectionSettings.Create().UseConsoleLogger().FailOnNoServerResponse(),
                 new Uri("tcp://eventstore:1113")
             ))
             {
