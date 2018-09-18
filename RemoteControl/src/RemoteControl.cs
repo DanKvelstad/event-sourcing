@@ -19,7 +19,7 @@ namespace SmartHome
             );
             await connection.ConnectAsync();
             
-            var RemoteControlQueryModel = new RemoteControlQueryModel()
+            var RemoteControlCommandModel = new RemoteControlCommandModel()
             {
                 Identifier = new Guid("11223344-5566-7788-99AA-BBCCDDEEFF00"),
                 Connection = connection
@@ -32,16 +32,16 @@ namespace SmartHome
                 switch(Random.Next(0,3))
                 {
                     case 0:
-                        RemoteControlQueryModel.DoIncrementBrightness();
+                        RemoteControlCommandModel.DoIncrementBrightness();
                         break;
                     case 1:
-                        RemoteControlQueryModel.DoDecrementBrightness();
+                        RemoteControlCommandModel.DoDecrementBrightness();
                         break;
                     case 2:
-                        RemoteControlQueryModel.DoIncrementColor();
+                        RemoteControlCommandModel.DoIncrementColor();
                         break;
                     case 3:
-                        RemoteControlQueryModel.DoDecrementColor();
+                        RemoteControlCommandModel.DoDecrementColor();
                         break;
                 }
             }

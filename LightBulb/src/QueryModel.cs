@@ -4,29 +4,28 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using EventStore.ClientAPI;
 using Newtonsoft.Json;
+using MongoDB;
 
 namespace SmartHome
 {
 
-    public class RemoteControlQueryModel : INotifyPropertyChanged
+    public class QueryModel : INotifyPropertyChanged
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
         
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         
-        public RemoteControlQueryModel(IEventStoreConnection connection, Guid identifier)
+        public void LinkTo(IEventStoreConnection connection, Guid identifier)
         {
-
-            StreamName = "remote_control-" + identifier.ToString("N");
-            
-            connection.SubscribeToStreamAsync(
-                StreamName, 
-                false, 
-                (EventStoreSubscription EventStoreSubscription, ResolvedEvent ResolvedEvent) => 
+            connection.SubscribeToStreamFrom(
+                "remote_control-" + Identifier.ToString("N"), 
+                EventNumber,
+                CatchUpSubscriptionSettings.Default, 
+                (EventStoreCatchUpSubscription EventStoreCatchUpSubscription, ResolvedEvent ResolvedEvent) =>
                 {
                     switch(ResolvedEvent.Event.EventType)
                     {
@@ -35,32 +34,51 @@ namespace SmartHome
                             Encoding.UTF8.GetString(ResolvedEvent.Event.Data),
                             typeof(Events.BrightnessChanged)
                         ) as Events.BrightnessChanged;
-                        Brightness += BrightnessChanged.Change;
+                        Brightness  += BrightnessChanged.Change;
+                        EventNumber  = ResolvedEvent.Event.EventNumber;
                         break;
                     case nameof(Events.ColorChanged):
                         var ColorChanged = JsonConvert.DeserializeObject(
                             Encoding.UTF8.GetString(ResolvedEvent.Event.Data),
                             typeof(Events.ColorChanged)
                         ) as Events.ColorChanged;
-                        Color += ColorChanged.Change;
+                        Color       += ColorChanged.Change;
+                        EventNumber  = ResolvedEvent.Event.EventNumber;
                         break;
                     }
                 },
-                (EventStoreSubscription EventStoreSubscription, SubscriptionDropReason SubscriptionDropReason, Exception Exception) =>
+                (EventStoreCatchUpSubscription EventStoreCatchUpSubscription) =>
+                {
+                    
+                },
+                (EventStoreCatchUpSubscription EventStoreCatchUpSubscription, SubscriptionDropReason SubscriptionDropReason, Exception Exception) =>
                 {
                     Console.WriteLine(
                         "The subscription was dropped because of: {0}",
                         SubscriptionDropReason
                     );
                     NotifyPropertyChanged(null);
-                }, 
+                },
                 null
             );
         }
 
-        private string StreamName;
+        [MongoDB.Bson.Serialization.Attributes.BsonId]
+        public Guid Identifier
+        {
+            get;
+            set;
+        }
+
+        [MongoDB.Bson.Serialization.Attributes.BsonElement("event_number")]
+        public long? EventNumber
+        {
+            set;
+            get;
+        }
 
         private int brightness;
+        [MongoDB.Bson.Serialization.Attributes.BsonElement("brightness")]
         public int Brightness
         {
             set
@@ -75,6 +93,7 @@ namespace SmartHome
         }
         
         private int color;
+        [MongoDB.Bson.Serialization.Attributes.BsonElement("color")]
         public int Color
         {
             set

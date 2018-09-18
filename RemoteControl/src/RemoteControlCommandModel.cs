@@ -9,7 +9,7 @@ using SmartHome.Events;
 namespace SmartHome
 {
 
-    public class RemoteControlQueryModel
+    public class RemoteControlCommandModel
     {
 
         public Guid Identifier
@@ -18,17 +18,17 @@ namespace SmartHome
             set;
         }
 
-        public IEventStoreConnection Connection
-        {
-            set;
-            get;
-        }
-
         public string StreamName
         {
             get => streamName ?? (streamName = "remote_control-" + Identifier.ToString("N"));
         }
         private string streamName;
+
+        public IEventStoreConnection Connection
+        {
+            set;
+            get;
+        }
 
         public async void DoIncrementBrightness()
         {
@@ -94,7 +94,7 @@ namespace SmartHome
         public async void DoIncrementColor()
         {
             await Connection.AppendToStreamAsync(
-                streamName,
+                StreamName,
                 ExpectedVersion.Any, 
                 new EventData(
                     Guid.NewGuid(),
@@ -124,7 +124,7 @@ namespace SmartHome
         public async void DoDecrementColor()
         {
             await Connection.AppendToStreamAsync(
-                streamName,
+                StreamName,
                 ExpectedVersion.Any, 
                 new EventData(
                     Guid.NewGuid(),

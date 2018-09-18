@@ -1,0 +1,91 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "docker_stop_light_bulb",
+            "type": "shell",
+            "command": "Invoke-Expression",
+            "args": [
+                "cmd /c \"docker stop light_bulb\""
+            ]
+        },
+        {
+            "label": "docker_remove_light_bulb",
+            "dependsOn":["docker_stop_light_bulb"],
+            "type": "shell",
+            "command": "Invoke-Expression",
+            "args": [
+                "cmd /c \"docker rm light_bulb\""
+            ]
+        },
+        {
+            "label": "docker_build_light_bulb",
+            "dependsOn":["docker_remove_light_bulb"],
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "build",
+                "${workspaceFolder}/LightBulb",
+                "-t", "light_bulb"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "docker_start_light_bulb",
+            "type": "process",
+            "dependsOn":["docker_build_light_bulb"],
+            "command": "docker",
+            "args": [
+                "run",
+                "-d",
+                "--network=smart_home",
+                "--name", "light_bulb",
+                "light_bulb"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "docker_stop_remote_control",
+            "type": "shell",
+            "command": "Invoke-Expression",
+            "args": [
+                "cmd /c \"docker stop remote_control\""
+            ]
+        },
+        {
+            "label": "docker_remove_remote_control",
+            "dependsOn":["docker_stop_remote_control"],
+            "type": "shell",
+            "command": "Invoke-Expression",
+            "args": [
+                "cmd /c \"docker rm remote_control\""
+            ]
+        },
+        {
+            "label": "docker_build_remote_control",
+            "dependsOn":["docker_remove_remote_control"],
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "build",
+                "${workspaceFolder}/RemoteControl",
+                "-t", "remote_control"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "docker_start_remote_control",
+            "type": "process",
+            "dependsOn":["docker_build_remote_control"],
+            "command": "docker",
+            "args": [
+                "run",
+                "-d",
+                "--network=smart_home",
+                "--name", "remote_control",
+                "remote_control"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

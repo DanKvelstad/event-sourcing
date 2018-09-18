@@ -1,0 +1,59 @@
+{
+   "version": "0.2.0",
+   "configurations": [
+        {
+            "name": "Dockerized Light Bulb",
+            "type": "coreclr",
+            "request": "launch",
+            "cwd": "/app",
+            "preLaunchTask": "docker_start_light_bulb",
+            "program": "dotnet",
+            "args": ["LightBulb.dll"],
+            "console": "internalConsole",
+            "stopAtEntry": true,
+            "internalConsoleOptions": "openOnSessionStart",
+            "pipeTransport": {
+                "pipeCwd": "${workspaceRoot}",
+                "pipeProgram": "docker",
+                "pipeArgs": [
+                    "exec", 
+                    "-i", 
+                    "light_bulb", 
+                    "sh",
+                    "-c"
+                ],
+                "debuggerPath": "/bin/vsdbg/vsdbg"
+            },
+            "sourceFileMap": {
+                "/app/src": "${workspaceRoot}/LightBulb/src"
+            }
+        },
+        {
+            "name": "Dockerized Remote Control",
+            "type": "coreclr",
+            "request": "launch",
+            "cwd": "/app",
+            "preLaunchTask": "docker_start_remote_control",
+            "program": "dotnet",
+            "args": ["RemoteControl.dll"],
+            "console": "internalConsole",
+            "stopAtEntry": true,
+            "internalConsoleOptions": "openOnSessionStart",
+            "pipeTransport": {
+                "pipeCwd": "${workspaceRoot}",
+                "pipeProgram": "docker",
+                "pipeArgs": [
+                    "exec", 
+                    "-i", 
+                    "remote_control", 
+                    "sh",
+                    "-c"
+                ],
+                "debuggerPath": "/bin/vsdbg/vsdbg"
+            },
+            "sourceFileMap": {
+                "/app/src": "${workspaceRoot}/RemoteControl/src"
+            }
+        }
+    ,]
+}

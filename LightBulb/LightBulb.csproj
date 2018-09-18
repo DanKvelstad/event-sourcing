@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EventStore.ClientAPI.NetCore" Version="4.1.0.23"/>
+    <PackageReference Include="EventStore.ClientAPI.NetCore" Version="4.1.0.23" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.7.0" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -16,8 +18,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="../EventDefinitions/*.cs"/>
-    <Compile Include="src/*.cs"/>
+    <Compile Include="../EventDefinitions/*.cs" />
+    <Compile Include="src/*.cs" />
   </ItemGroup>
 
 </Project>
